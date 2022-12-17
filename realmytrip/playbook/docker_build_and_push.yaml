@@ -1,0 +1,18 @@
+- hosts: k8s 
+  gather_facts: no
+
+  tasks:
+    - name: Login to Docker Hub
+      docker_login:
+        username: ddung1203
+        password: "{{ lookup('env', 'PASS') }}"
+        reauthorize: yes
+
+    - name: Build and Push Image
+      docker_image:
+        build:
+          path: realmytrip/
+        name: ddung1203/realmytrip
+        tag: "{{ lookup('env', 'BUILD_NUMBER') }}"
+        push: yes
+        source: build
